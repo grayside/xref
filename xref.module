@@ -282,3 +282,21 @@ function xref_view($nodetype, $nid, $fieldname = null, $viewname = null) {
 function xref_views_api() {
   return array('api' => 2);
 }
+
+/**
+ * Implementation of hook_features_pipe_alter().
+ * Add variables related to node component.
+ */
+function xref_features_pipe_node_alter(&$pipe, $data, $export, $module_name) {
+  if (!empty($data)) {
+    $variables = array(
+      'xref_links',
+      'xref_view',
+    );
+    foreach ($data as $node_type) {
+      foreach ($variables as $variable_name) {
+        $pipe['variable'][] = "{$variable_name}_{$node_type}";
+      }
+    }
+  }
+}
